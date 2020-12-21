@@ -1,7 +1,7 @@
-module App.Slice where
+module Features.Slice where
 
 import Prelude
-import App.Wizard (FormData, Step(..), Result, exampleWizard)
+import Features.Wizard (FormData, Step(..), Result, exampleWizard)
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Unsafe (unsafePerformEffect)

@@ -1,7 +1,7 @@
 module Views.Result where
 
 import Prelude
-import App.Wizard (Result)
+import Features.Wizard (Result)
 import React.Basic.DOM as R
 import React.Basic.Hooks (Component, component)
 

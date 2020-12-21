@@ -1,7 +1,7 @@
 module Main where
 
-import Prelude (Unit, bind, pure, unit, ($), (<$>), (=<<))
-import App.Slice as Slice
+import Prelude
+import Features.Slice as Slice
 import Views.Result (mkResultView)
 import Views.Form (mkFormView)
 import Data.Maybe (Maybe(..))
@@ -28,9 +28,9 @@ mkApp = do
 
 main :: Effect Unit
 main = do
-  mContainer <- getElementById "root" =<< (toNonElementParentNode <$> (document =<< window))
+  mContainer <- ((getElementById "root") <<< toNonElementParentNode) =<< document =<< window
   case mContainer of
-    Nothing -> throw "Could not find body."
+    Nothing -> throw "Could not find #root element."
     Just container -> do
       app <- mkApp
       render (app unit) container

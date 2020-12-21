@@ -1,7 +1,7 @@
 module Views.Form where
 
 import Prelude
-import App.Slice (Action(..), AppState, AppDispatch)
+import Features.Slice (Action(..), AppState, AppDispatch)
 import Data.Either (Either(..), isRight)
 import Data.Maybe (Maybe(..), isNothing, maybe)
 import Data.Tuple (Tuple)
