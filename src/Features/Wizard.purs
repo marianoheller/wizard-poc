@@ -53,7 +53,7 @@ exampleWizard = do
         "I know now that your name is " <> firstName <> " " <> lastName
           <> maybe "" (\a -> ", you are " <> show a <> " years old") age
           <> ", live in "
-          <> country
+          <> country.name
           <> " and "
           <> (if workFromHome then "do" else "do not")
           <> " work from home."

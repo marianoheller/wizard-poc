@@ -1,5 +1,12 @@
 { name = "wizard-poc"
-, dependencies = [ "console", "effect", "psci-support", "lumi-components" ]
+, dependencies =
+  [ "argonaut"
+  , "console"
+  , "effect"
+  , "lumi-components"
+  , "milkis"
+  , "psci-support"
+  ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
 }
