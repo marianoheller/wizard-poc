@@ -1,5 +1,7 @@
 # Wizard PoC
 
+## PoC
+- Async select options
 
 ## Things to try
 - Submit error & Resource loading error handling
@@ -7,4 +9,4 @@
 - Top Stepper
 - Use material-ui
 - Use datepicker
-- Select with debounced async options fetch
+- Debounced async options fetch

@@ -1,9 +1,8 @@
 module Features.Steps.Step02 where
 
 import Prelude
-
-import Data.Argonaut (JsonDecodeError)
 import Data.Argonaut as Argo
+import Data.Bifunctor (lmap)
 import Data.Either (Either(..), note)
 import Data.Lens.Record (prop)
 import Data.Maybe (Maybe(..), isJust)
@@ -38,17 +37,15 @@ type SecondStepResult
     }
 
 type CountryOption
-  = { name :: String
-    , id :: String
-    }
+  = { name :: String }
 
-type CountryOptions
+type CountrySearchPayload
   = Array CountryOption
 
-fetchOptions :: String -> Aff CountryOptions
+fetchOptions :: String -> Aff CountrySearchPayload
 fetchOptions input = do
-  res <- map Argo.fromString $ M.text =<< fetch (M.URL $ "https://restcountries.eu/rest/v2/name/" <> input) M.defaultFetchOptions
-  case (Argo.decodeJson res) :: Either JsonDecodeError CountryOptions of
+  res <- map Argo.jsonParser $ M.text =<< fetch (M.URL $ "https://restcountries.eu/rest/v2/name/" <> input) M.defaultFetchOptions
+  case (res >>= (lmap show <<< Argo.decodeJson)) :: Either String CountrySearchPayload of
     Right countries -> pure countries
     Left e -> do
       error $ show e
@@ -61,7 +58,7 @@ optionRenderer :: CountryOption -> JSX
 optionRenderer c = D.text c.name
 
 validateCountry :: Maybe CountryOption -> Either String CountryOption
-validateCountry = note "lala"
+validateCountry = note "Search and select a country"
 
 secondStepForm :: forall props. Maybe Int -> FormBuilder { readonly :: Boolean | props } SecondStepFormData SecondStepResult
 secondStepForm age = ado
