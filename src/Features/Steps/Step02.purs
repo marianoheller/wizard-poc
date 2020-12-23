@@ -8,7 +8,6 @@ import Data.Lens.Record (prop)
 import Data.Maybe (Maybe(..), isJust)
 import Data.Symbol (SProxy(..))
 import Effect.Aff (Aff)
-import Effect.Class.Console (error)
 import Lumi.Components.Form (FormBuilder, Validated)
 import Lumi.Components.Form as F
 import Lumi.Components.Input as Input
@@ -30,7 +29,7 @@ type SecondStepFormData
     }
 
 type SecondStepResult
-  = { country :: CountryOption
+  = { country :: String
     , workFromHome :: Boolean
     , height :: Maybe Number
     , favoriteColor :: String
@@ -47,9 +46,7 @@ fetchOptions input = do
   res <- map Argo.jsonParser $ M.text =<< fetch (M.URL $ "https://restcountries.eu/rest/v2/name/" <> input) M.defaultFetchOptions
   case (res >>= (lmap show <<< Argo.decodeJson)) :: Either String CountrySearchPayload of
     Right countries -> pure countries
-    Left e -> do
-      error $ show e
-      pure []
+    Left e -> pure []
 
 toSelectOption :: CountryOption -> SelectOption
 toSelectOption c = { value: c.name, label: c.name }
@@ -63,7 +60,8 @@ validateCountry = note "Search and select a country"
 secondStepForm :: forall props. Maybe Int -> FormBuilder { readonly :: Boolean | props } SecondStepFormData SecondStepResult
 secondStepForm age = ado
   country <-
-    F.indent "Country" Required
+    map _.name
+      $ F.indent "Country" Required
       $ F.focus (prop (SProxy :: SProxy "country"))
       $ F.validated validateCountry
       $ F.asyncSelect fetchOptions toSelectOption optionRenderer
